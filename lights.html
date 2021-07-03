@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Controller</title>
+</head>
+<body>
+    <h1>Light controller</h1>
+    <p>Red Light: <span id="redLight">OFF</span></p>
+    <p>Green Light: <span id="greenLight">OFF</span></p>
+    <p>Blue Light: <span id="blueLight">OFF</span> </p>
+    <button onclick="toggleLightState('redLight')">Toggle Red Light</button>
+    <button onclick="toggleLightState('greenLight')">Toggle Green Light</button>
+    <button onclick="toggleLightState('blueLight')">Toggle Blue Light</button>
+</body>
+</html>
+
+<script>
+    const url = "http://192.168.1.221:3000/"
+
+    String.prototype.capitalize = function() {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+    }
+
+    const toggleLightState = (light) => {
+        fetch(url+"toggle"+light.capitalize())
+        updateLightState(light);
+    }
+
+    const updateLightState = (light) => {
+        fetch(url+light)
+        .then(resp => resp.json())
+        .then(data => {
+            const element = document.getElementById(light);
+            element.innerText = data.state ? "ON" : "OFF";
+        })
+    }
+
+    updateLightState("redLight");
+    updateLightState("blueLight")
+    updateLightState("greenLight")
+    
+</script>
